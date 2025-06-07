@@ -1,12 +1,18 @@
 'use client';
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
 import Logo from '@/public/Logo.svg';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import article from '@/app/articles.json';
+import hotNews from '@/app/HotTopic.json';
+type Article = { title: string; content: string; author: string; date: string };
+
 const ArticlePage = () => {
+  const [articleData, setArticleData] = useState<Article | undefined>(
+    undefined
+  );
   const searchParams = useSearchParams();
   const articleTitle = searchParams.get('article');
   if (!articleTitle) {
@@ -16,8 +22,14 @@ const ArticlePage = () => {
       </p>
     );
   }
-
-  const articleData = article.find((item) => item.title === articleTitle);
+  useEffect(() => {
+    setArticleData(article.find((item) => item.title === articleTitle));
+    if (!articleData) {
+      if (hotNews.title === articleTitle) {
+        setArticleData(hotNews);
+      }
+    }
+  }, []);
   if (!articleData) {
     return (
       <p className="text-[100px] text-red-600 font-black w-screen h-screen flex justify-center items-center">
@@ -25,6 +37,7 @@ const ArticlePage = () => {
       </p>
     );
   }
+
   return (
     <div className="flex justify-center ">
       <main className="w-[100%] lg:w-[900] min-h-screen  lg:shadow-2xl shadow-none relative pr-[90px] pl-[90px]">

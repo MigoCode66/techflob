@@ -13,7 +13,7 @@ export default function Home() {
       </div>
       <Hero />
       <Posts />
-      <div className="h-screen"></div>
+    
 
     </div>
   );
